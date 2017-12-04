@@ -4,5 +4,13 @@
 (defn line-words [line]
   (str/split line #" "))
 
+(defn num-lines-repeating-words [input]
+  (frequencies (map (fn [n] (some #(not= 1 %) n))
+                    (->>
+                     (str/split-lines input)
+                     (map line-words)
+                     (map frequencies)
+                     (map vals)))))
+
 (defn day4 [input]
-   (println "day 4: " (get (frequencies (map (fn [n] (some #(not= 1 %) n)) (map vals (map frequencies (map line-words (str/split-lines input)))))) nil)))
+  (println "day 4: " (get (num-lines-repeating-words input) nil)))
