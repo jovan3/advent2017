@@ -13,6 +13,9 @@
 (defn calculate-part2-offset [jump-offset]
   (if (>= jump-offset 3) (dec jump-offset) (inc jump-offset)))
 
+(defn process-input [input]
+  (into [] (map #(Integer/parseInt %) (str/split-lines input))))
+
 (defn day5 [input]
-  (println "day 5 part 1:" (move (into [] (map #(Integer/parseInt %) (str/split-lines input))) #(inc %)))
-  (println "day 5 part 2:" (move (into [] (map #(Integer/parseInt %) (str/split-lines input))) calculate-part2-offset)))
+  (println "day 5 part 1:" (move (process-input input) #(inc %)))
+  (println "day 5 part 2:" (move (process-input input) calculate-part2-offset)))
