@@ -27,4 +27,7 @@
       (recur (conj iterations current) (reallocate-bank current)))))
                              
 (defn day6 [input]
-  (println "day 6 part 1:" (dec (count (reallocate (process-input input))))))
+  (let [iterations (reallocate (process-input input))
+        total (dec (count iterations))]
+    (println "day 6 part 1:" total)
+    (println "day 6 part 2:" (- total (.indexOf iterations (last iterations))))))
