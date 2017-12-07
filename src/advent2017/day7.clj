@@ -21,4 +21,9 @@
     (map (fn [n] [vert-from n]) verts-to)))
 
 (defn day7 [input]
-  (uber/viz-graph (apply uber/graph (mapcat make-edges (map parse-line (str/split-lines input))))))
+  (->>
+   (str/split-lines input)
+   (map parse-line)
+   (mapcat make-edges)
+   (apply uber/graph)
+   (uber/viz-graph)))
