@@ -22,24 +22,24 @@
 (defn init-registers [register-names]
   (into {} (map (fn [r] [r 0]) register-names)))
 
+(defn mapmax [m]
+  (get m (key (apply max-key val m))))
+
 (defn run [input-lines registers]
-  (loop [current-line (first input-lines) remaining (rest input-lines) reg registers]
-    (println reg)
-    (println current-line)
-    (if (= remaining '()) reg
+  (loop [current-line (first input-lines) remaining (rest input-lines) reg registers max 0]
+    (if (= remaining '()) [reg max]
         (let [parsed-line (parse-line current-line)
               reg-to-compare (get reg (:reg-compare parsed-line))
               register-value (get reg (:register parsed-line))]
-          (if ((:comparison parsed-line) reg-to-compare)
-            (recur (first remaining) (rest remaining) (update reg (:register parsed-line) (:operation parsed-line)))
-            (recur (first remaining) (rest remaining) reg))))))
-
-(defn mapmax [m]
-  (get m (key (apply max-key val m))))
+          (let [updated-reg (if ((:comparison parsed-line) reg-to-compare)
+                              (update reg (:register parsed-line) (:operation parsed-line))
+                              reg)
+                new-max (mapmax updated-reg)]
+            (recur (first remaining) (rest remaining) updated-reg (if (> new-max max) new-max max)))))))
 
 (defn day8 [input]
   (let [lines (str/split-lines input)
         registers (init-registers (register-names lines))]
     (let [result (run lines registers)]
-      (println result)
-      (mapmax result))))
+      (println "day 8 part 1: " (mapmax (first result)))
+      (println "day 8 part 2: " (last result)))))
