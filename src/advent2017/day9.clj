@@ -13,4 +13,7 @@
     (update (update prev-stack :total + (:size prev-stack)) :size dec)))
 
 (defn day9 [input]
-  (println "day 9 part 1:" (reduce stack {:size 0 :total 0} (str/split (remove-garbage (preprocess-escapes input)) #""))))
+  (let [input-no-escapes (preprocess-escapes input)]
+    (println "day 9 part 1:" (reduce stack {:size 0 :total 0} (str/split (remove-garbage input-no-escapes) #"")))
+    (let [garbage (re-seq #"<.*?>" input-no-escapes)]
+      (println "day 9 part 2" (reduce + (map #(- (count %) 2) garbage))))))
