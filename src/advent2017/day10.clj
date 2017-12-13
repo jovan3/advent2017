@@ -17,12 +17,15 @@
                        (= direction :right) shift-right)]
     (last (take (inc times) (iterate shift-fn s)))))
 
+(defn make-knot [s length index]
+  (let [[first-part last-part] (split-at length (shift s :left index))]
+    (shift (concat (reverse first-part) last-part) :right index)))
+
 (defn knot-hash [list input]
   (loop [l list in input skip 0 current 0]
     (let [length (first in)]
       (if (nil? length) l
-          (let [[first-part last-part] (split-at length (shift l :left current))]
-            (recur (shift (into (concat (reverse first-part) last-part)) :right current) (rest in) (inc skip) (mod (+ current skip length) (count l))))))))
+          (recur (make-knot l length current) (rest in) (inc skip) (mod (+ current skip length) (count l)))))))
 
 (defn day10 [input]
   (let [knot-result (knot-hash (init-list) (process-input input))]
