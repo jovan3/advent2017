@@ -12,15 +12,19 @@
         (= label "se") '(1 -1 0)
         (= label "sw") '(-1 0 1)))
 
-(defn move [input]
-  (loop [current '(0 0 0) in input]
-    (println current)
-    (let [next-dir-label (first in)]
-      (if (nil? next-dir-label) current
-          (recur (map + current (direction next-dir-label)) (rest in))))))
 
 (defn distance [point]
   (/ (+ (Math/abs (first point)) (Math/abs (second point)) (Math/abs (last point))) 2))
 
+(defn move [input]
+  (loop [current '(0 0 0) in input max-distance 0]
+    (let [next-dir-label (first in)]
+      (if (nil? next-dir-label) {:max-distance max-distance :distance (distance current)}
+          (let [next-point (map + current (direction next-dir-label))
+                next-distance (distance next-point)]
+            (recur next-point (rest in) (max next-distance max-distance)))))))
+
 (defn day11 [input]
-  (println "day 11 part 1:" (distance (move (process-input input)))))
+  (let [result (move (process-input input))]
+    (println "day 11 part 1:" (:distance result))
+    (println "day 11 part 2:" (:max-distance result))))
