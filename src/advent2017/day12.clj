@@ -16,4 +16,5 @@
    (map parse-line)
    (mapcat day7/make-edges)
    (apply uber/graph))]
-    (println "day 12 part 1:" (count (alg/pre-traverse graph "0")))))
+    (println "day 12 part 1:" (count (alg/pre-traverse graph "0")))
+    (println "day 12 part 2:" (count (alg/connected-components graph)))))
