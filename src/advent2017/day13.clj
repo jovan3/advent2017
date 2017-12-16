@@ -26,10 +26,9 @@
 
 (defn layer-severity [position layer-s]
   (if (nil? layer-s) 0
-      (do        
-        (cond
-          (and (= (:position layer-s 1) 1) (= (:direction layer-s) :down)) (* position (:length layer-s))
-          :else 0))))
+      (cond
+        (and (= (:position layer-s 1) 1) (= (:direction layer-s) :down)) (* position (:length layer-s))
+        :else 0)))
 
 (defn next-state [state]
   (reduce-kv (fn [m k v] (assoc m k (move-s v))) (empty state) state))
@@ -39,6 +38,14 @@
     (if (> position (key (last initial-state))) caught
         (recur (next-state state) (inc position) (conj caught (layer-severity position (get state position)))))))
 
+(defn find-min-severity [initial-state]
+  (loop [s (next-state initial-state) i 0]
+    (let [severities (move-packet s)
+          total (reduce + severities)]
+      (if (= total 0) i
+          (recur (next-state s) (inc i))))))
+
 (defn day13 [input]
   (let [severities (move-packet (next-state (process input)))]
-    (println "day 13 part 1:" (reduce + severities))))
+    (println "day 13 part 1:" (reduce + severities))
+    (find-min-severity (process input))))
