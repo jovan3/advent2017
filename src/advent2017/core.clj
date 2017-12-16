@@ -31,7 +31,8 @@
   (println (day9/day9 (resource-to-string "day9_input")))
   (println (day10/day10 (resource-to-string "day10_input")))
   (println (day11/day11 (resource-to-string "day11_input")))
-  (println (day12/day12 (resource-to-string "day12_input"))))
+  (println (day12/day12 (resource-to-string "day12_input")))
   (println (day13/day13 (resource-to-string "day13_input"))))
+  (println (day10/day10 (resource-to-string "day10_input"))))
   
 
