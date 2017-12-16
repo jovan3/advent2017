@@ -11,6 +11,7 @@
             [advent2017.day10 :as day10]
             [advent2017.day11 :as day11]
             [advent2017.day12 :as day12]
+            [advent2017.day13 :as day13]
             [clojure.java.io :as io]))
 
 (defn resource-to-string [resource_filename]
@@ -29,7 +30,8 @@
   (println (day8/day8 (resource-to-string "day8_input")))
   (println (day9/day9 (resource-to-string "day9_input")))
   (println (day10/day10 (resource-to-string "day10_input")))
-  (println (day11/day11 (resource-to-string "day11_input"))))
+  (println (day11/day11 (resource-to-string "day11_input")))
   (println (day12/day12 (resource-to-string "day12_input"))))
+  (println (day13/day13 (resource-to-string "day13_input"))))
   
 
