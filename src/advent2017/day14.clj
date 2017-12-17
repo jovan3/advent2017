@@ -1,8 +1,7 @@
 (ns advent2017.day14
   (:import (org.apache.commons.codec.binary Hex))
   (:import (org.apache.commons.codec.binary BinaryCodec))
-  (:require [clojure.string :as str]
-            [advent2017.day10 :as day10]))
+  (:require [advent2017.day10 :as day10]))
 
 (defn gen-row-strings [input]
   (map #(str input "-" %) (range 128)))
