@@ -1,6 +1,8 @@
 (ns advent2017.day16
   (:require [clojure.string :as str]))
 
+(def p2times 1000000000)
+
 (defn s->int [s] (Integer/parseInt (str s)))
 
 (defn spin [c n]
@@ -34,6 +36,23 @@
         params (:params parsed-move)]
     (apply func c params)))
 
+(defn do-all-moves [letters moves]
+  (reduce do-move letters moves))
+
+(defn find-cycle-repetitions [letters moves times]
+  (loop [i 0 l letters results []]
+    (let [next-result (do-all-moves l moves)]
+      (if (.contains results next-result) i
+          (recur (inc i) next-result (conj results next-result))))))
+
+(defn repeat-times [letters moves times]
+  (loop [i 0 l letters]
+    (if (= i times) l
+        (recur (inc i) (do-all-moves l moves)))))
+
 (defn day16 [input]
-  (let [letters ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"]]
-    (println "day 16 part 1:" (apply str (reduce do-move letters (process-input input))))))
+  (let [letters ["a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p"]
+        moves (process-input input)]
+    (println "day 16 part 1:" (apply str (do-all-moves letters moves)))
+    (let [times (mod p2times (find-cycle-repetitions letters moves p2times))]
+      (println "day 16 part 2:" (apply str (repeat-times letters moves times))))))
