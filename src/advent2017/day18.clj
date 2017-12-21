@@ -46,20 +46,22 @@
     (assoc regs "pc" (dec (+ (value "pc" regs) (value (second args) regs))))
     regs))
 
+(defn get-func [func-name]
+  (get {"mod" remainder
+        "set" setval
+        "mul" mul
+        "add" add
+        "snd" snd
+        "rcv" rcv
+        "jgz" jgz} func-name))
+
 (defn exec-instruction [instruction regs]
   (let [[name & args] (str/split instruction #" ")]
-    (update ((cond (= name "mod") remainder
-                   (= name "set") setval
-                   (= name "mul") mul
-                   (= name "add") add
-                   (= name "snd") snd
-                   (= name "rcv") rcv
-                   (= name "jgz") jgz) args regs) "pc" inc)))
+    (update ((get-func name) args regs) "pc" inc)))
 
 (defn run [instructions]
   (loop [regs (init-registers)]
-    (let [pc (get regs "pc")
-          instruction (nth instructions pc nil)]
+    (let [pc (get regs "pc") instruction (nth instructions pc nil)]
       (if (or (nil? instruction) (= "rcv" (first (str/split instruction #" ")))) regs
           (let [next-regs (exec-instruction instruction regs)]
             (recur next-regs))))))
