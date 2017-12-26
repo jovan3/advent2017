@@ -33,17 +33,21 @@
         (key (first (path-neighbors world neigh))))
       direction)))
 
-(defn invalid-pos [world position]
-  (let [[y x] position dim (count world) value (get-in world position)]
-    (or (> y dim) (> x dim) (< y 0) (< x 0) (nil? value) (= " " value))))
+(defn invalid-pos? [world position]
+  (let [[y x] position ydim (count world) xdim (count (first world)) value (get-in world position)]
+    (or (> y ydim) (> x xdim) (< y 0) (< x 0) (nil? value) (= " " value))))
      
 (defn walk [input init-position]
   (loop [pos init-position direction :down history []]
-    (if (invalid-pos input pos) history
+    (if (invalid-pos? input pos) history
         (let [next-dir (next-direction input pos direction)
               next-pos (next-position input pos next-dir)]
           (recur next-pos next-dir (conj history (get-in input pos)))))))
 
 (defn day19 [input]
-  (let [world (process-input input) start (find-beginning world)]
-    (println "day 19 part 1:" (apply str (filter #(re-matches #"[A-Z]" %) (walk world start))))))
+  (let [world (process-input input)
+        start (find-beginning world)
+        walk-history (walk world start)]
+    (println "day 19 part 1:" (apply str (filter #(re-matches #"[A-Z]" %) walk-history)))
+    (println "day 19 part 2:" (count walk-history))))
+  
