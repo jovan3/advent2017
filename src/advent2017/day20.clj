@@ -1,6 +1,8 @@
 (ns advent2017.day20
   (:require [clojure.string :as str]))
 
+(def max-steps 1000)
+
 (defn point-str->vec [point-str]
   (vec (map #(Integer/parseInt %) (str/split point-str #","))))
 
@@ -29,11 +31,11 @@
 
 (defn remove-colisions [input]
   (loop [particles input t 0]
-    (if (> t 1000) particles
+    (if (> t max-steps) particles
         (recur (doall (map move-particle (remove-colided particles))) (inc t)))))
 
 (defn day20 [input]
   (let [world (process-input input)
-        distances (map distance (nth (iterate #(doall (map move-particle %)) world) 1000))]
+        distances (map distance (nth (iterate #(doall (map move-particle %)) world) max-steps))]
     (println "day 20 part 1:" (.indexOf distances (apply min distances)))
     (println "day 20 part 2:" (count (remove-colisions world)))))
