@@ -22,7 +22,18 @@
   (let [position (:p particle)]
     (reduce + (map #(Math/abs %) position))))
 
+(defn remove-colided [particles]
+  (let [groups (group-by :p particles)
+        remove-positions (or (keys (filter (fn [[k v]] (> (count v) 1)) groups)) '())]
+    (filter #(not (.contains remove-positions (:p %))) particles)))
+
+(defn remove-colisions [input]
+  (loop [particles input t 0]
+    (if (> t 1000) particles
+        (recur (doall (map move-particle (remove-colided particles))) (inc t)))))
+
 (defn day20 [input]
   (let [world (process-input input)
-        distances (map distance (nth (iterate #(doall (map move-particle %)) world) 10000))]
-    (println "day 20 part 1:" (.indexOf distances (apply min distances)))))
+        distances (map distance (nth (iterate #(doall (map move-particle %)) world) 1000))]
+    (println "day 20 part 1:" (.indexOf distances (apply min distances)))
+    (println "day 20 part 2:" (count (remove-colisions world)))))
