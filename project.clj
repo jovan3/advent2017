@@ -6,4 +6,5 @@
   :dependencies [[org.clojure/clojure "1.9.0"]
                  [ubergraph "0.4.0"]
                  [commons-codec/commons-codec "1.11"]]
+  :plugins [[cider/cider-nrepl "0.15.1"]]
   :main advent2017.core)
