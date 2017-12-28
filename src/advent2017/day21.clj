@@ -47,18 +47,19 @@
     (mapv (fn [chunk] [(first chunk) (get rules (second chunk))]) chunked-matrix)))
 
 (defn merge-chunks [chunks]
-  ;(println chunks)
-  ;(clojure.pprint/pprint chunks)
   (if (= (count chunks) 1) (first chunks)
       (apply mapv (fn [& i] (vec (flatten (vector i)))) chunks)))
 
 (defn map-kv [f coll]
   (reduce-kv (fn [m k v] (assoc m k (f v))) (empty coll) coll))
 
+(defn merge-rows [row-groups]
+  (vals (map-kv #(merge-chunks (map (fn [chunk] (second chunk)) %)) row-groups)))
+
 (defn enhance [m rules]
-  (let [enhanced-chunks (enhance-chunks m rules)]
-    (let [res (vals (map-kv #(merge-chunks (map (fn [chunk] (second chunk)) %)) (group-by #(first %) enhanced-chunks)))]
-      (apply concat res))))
+  (let [enhanced-chunks (enhance-chunks m rules)
+        row-groups (group-by #(first %) enhanced-chunks)]
+      (apply concat (merge-rows row-groups))))
 
 (defn day21 [input]
   (let [rulez (process-input input)
