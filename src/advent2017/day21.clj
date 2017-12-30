@@ -29,7 +29,7 @@
   (into {} (map process-line (str/split-lines input))))
 
 (defn mprint [m]
-  (println (apply str (interpose "\n" (map #(apply str %)  m))) "\n" ))
+  (println (apply str (interpose "\n" (map #(apply str (interpose " " %))  m))) "\n" ))
 
 (defn get-chunk [m position size]
   (let [[x y] position]
