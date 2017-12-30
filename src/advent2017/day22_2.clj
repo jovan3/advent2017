@@ -73,7 +73,5 @@
               total-bursts (if (= node "W") (inc bursts) bursts)]
           (recur (update-in g position flip) (inc i) next-position next-direction total-bursts)))))
 
-(def initial-grid [["." "." "#"] ["#" "." "."] ["." "." "."]])
-
 (defn day22_2 [input]
   (println "day 22 part 1:" (move (place-initial-nodes-on-grid (process-input input)))))
