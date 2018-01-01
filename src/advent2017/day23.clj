@@ -51,13 +51,31 @@
 (defn mul? [instruction]
   (= "mul" (first (str/split instruction #" "))))
 
-(defn run [instructions]
-  (loop [regs (init-registers) mul 0]
+(defn run [instructions registers]
+  (loop [regs registers mul 0]
     (let [pc (get regs "pc") instruction (nth instructions pc nil)]
-      (if (nil? instruction) mul
+      (if (nil? instruction) [mul regs]
           (let [next-regs (exec-instruction instruction regs)
                 mul-calls (if (mul? instruction) (inc mul) mul)]
             (recur next-regs mul-calls))))))
 
+(defn is-prime? [number]
+  (let [upper-check-limit (inc (Math/round (Math/sqrt number)))]
+    (empty? (filter #(zero? (mod number %)) (range 2 upper-check-limit)))))
+
+(defn part2 [b]
+  (let [new-b (+ (* b 100) 100000)]
+    (count (filter #(not (is-prime? %)) (range new-b (inc (+ 17000 new-b)) 17)))))
+
+(defn process-part2-input [input]
+  (->>
+   (str/split-lines input)
+   first
+   (#(str/split % #" "))
+   last
+   str->int))
+
 (defn day23 [input]
-  (println "day 23 part 1:" (run (process-input input))))
+  (let [part1-registers (init-registers)]
+    (println "day 23 part 1:" (first (run (process-input input) part1-registers)))
+    (println "day 23 part 2:" (part2 (process-part2-input input)))))
